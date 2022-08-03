@@ -9,7 +9,9 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven { setUrl("https://jitpack.io") }
+    maven { setUrl("https://repo.opencollab.dev/maven-releases/") }
+    maven { setUrl("https://repo.opencollab.dev/maven-snapshots/") }
+    maven { setUrl("https://jitpack.io/") }
 }
 
 dependencies {
@@ -21,12 +23,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.0-alpha7")
     implementation("org.slf4j:slf4j-simple:2.0.0-alpha7")
 
-    implementation("com.github.GeyserMC:MCProtocolLib:1.16.5-2") {
-        exclude(group = "com.github.steveice10")
-    }
-    implementation("com.github.GeyserMC:OpenNBT:1.4")
-    implementation("com.github.GeyserMC:mcauthlib:1.4")
-    implementation("com.github.GeyserMC:PacketLib:2.0")
+    implementation("com.github.steveice10:mcprotocollib:1.19-2-SNAPSHOT")
 }
 
 application {

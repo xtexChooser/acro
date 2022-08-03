@@ -30,7 +30,6 @@ object Acro : CoroutineScope {
 
     fun start() {
         logger.info("Starting...")
-        logger.info("Current Minecraft protocol: ${MinecraftConstants.GAME_VERSION}/${MinecraftConstants.PROTOCOL_VERSION}")
         connect()
     }
 

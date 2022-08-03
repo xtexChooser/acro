@@ -12,8 +12,8 @@ data class AcroConfig(
 
     @Serializable
     data class ServerEndpoint(
-        val host: String = "ricky.dyn.hjt.xyz",
-        val port: Int = 33333,
+        val host: String = "xaa.huaua.top",
+        val port: Int = 24646,
         val proxy: ProxyConfig? = null,
         val reconnectDelay: Int = 5000,
     )
