@@ -1,44 +1,45 @@
 package acro
 
+import acro.bot.Bot
+import acro.bot.WSSpawnTowerAFKBot
 import acro.config.AcroConfig
-import acro.protocol.AcroMinecraftProtocol
-import acro.protocol.adapter.SessionStatusLogger
-import com.github.steveice10.mc.protocol.MinecraftConstants
-import com.github.steveice10.packetlib.tcp.TcpClientSession
+import acro.ctl.QQGuildBot
 import com.typesafe.config.ConfigFactory
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.hocon.decodeFromConfig
 import okio.Path.Companion.toOkioPath
+import org.jetbrains.exposed.sql.Database
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.coroutines.EmptyCoroutineContext
 
 object Acro : CoroutineScope {
 
-    val logger = LoggerFactory.getLogger("Acro")
+    val logger: Logger = LoggerFactory.getLogger("Acro")
     override val coroutineContext = EmptyCoroutineContext
-
-    val basePath = File(System.getProperty("acro.base_path", "/")).toOkioPath()
+    val basePath = File(System.getProperty("acro.base_path", "./")).absoluteFile.toOkioPath()
 
     @OptIn(ExperimentalSerializationApi::class)
     val config = Hocon.decodeFromConfig<AcroConfig>(ConfigFactory.parseFile((basePath / "config.conf").toFile()))
 
-    lateinit var protocol: AcroMinecraftProtocol
-    lateinit var client: TcpClientSession
+    lateinit var database: Database
+    val bots = mutableMapOf<String, Bot>()
 
     fun start() {
         logger.info("Starting...")
-        connect()
+        connectDatabase()
+        QQGuildBot.start()
+        if (config.wsSpawnTowerAfk != null)
+            WSSpawnTowerAFKBot.start()
     }
 
-    fun connect() {
-        logger.info("Connecting...")
-        protocol = AcroMinecraftProtocol(config.playerName)
-        client = config.serverEndpoint.run { TcpClientSession(host, port, protocol, proxy?.toProxyInfo()) }
-        client.addListener(SessionStatusLogger)
-        client.connect()
+    private fun connectDatabase() {
+        logger.info("Connecting to main database...")
+        database = config.database.connect()
+        logger.info("Connected to main database")
     }
 
 }

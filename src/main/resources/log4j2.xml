@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="StdOut" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{[%d{dd:HH:mm:ss.SSS}][%-5p][%T/%t] (%c{1}) %msg{nolookups}}%n" disableAnsi="false"/>
+        </Console>
+
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+            <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="ACCEPT"/>
+            <PatternLayout pattern="[%d{dd:HH:mm:ss.SSS}][%level] (%logger{1}) %msg{nolookups}%n"/>
+            <DefaultRolloverStrategy max="5" fileIndex="min"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <OnStartupTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="StdOut"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
