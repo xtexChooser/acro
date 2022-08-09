@@ -7,7 +7,7 @@
 
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="[%d{dd:HH:mm:ss.SSS}][%level] (%logger{1}) %msg{nolookups}%n"/>
+            <PatternLayout pattern="[%d{dd:HH:mm:ss.SSS}][%-5p][%T/%t] (%c{1}) %msg{nolookups}%n"/>
             <DefaultRolloverStrategy max="5" fileIndex="min"/>
             <Policies>
                 <TimeBasedTriggeringPolicy />
